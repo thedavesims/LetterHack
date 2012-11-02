@@ -3,9 +3,10 @@ from copy import copy
 import sys
 
 
-def find_words(letter_string, preferred_letters=None):
+def find_words(letter_string, preferred_letters=''):
     #Convert letters to lowercase and split it into a list
     letters = list(letter_string.lower())
+    preferred = list(preferred_letters.lower())
     #list to hold our words loaded from our text file
     words=[]
     found_words=[]
@@ -17,18 +18,18 @@ def find_words(letter_string, preferred_letters=None):
     #for each word in the list
     for word in words: 
         word_as_list = list(word)
-        preferred = list(preferred_letters)
+        pref = copy(preferred)
         any_missing = False
         for letter in letters:
             if letter in word_as_list:
                 word_as_list.remove(letter)
-                if letter in preferred:
-                    preferred.remove(letter)
+                if letter in pref:
+                    pref.remove(letter)
             else:
                 any_missing = True
         if len(word_as_list) == 0:
             found_words.append(word)
-            if preferred_letters and len(preferred) == 0:
+            if preferred and len(pref) == 0:
                 preferred_words.append(word)
         if not any_missing:
             partial_words.append(word)
@@ -50,7 +51,7 @@ def find_words(letter_string, preferred_letters=None):
 if __name__ == '__main__':
     #The list of letters that appear on your letterpress screen
     letter_string = 'WCVOUBISHROZORELDANCLZYVG'
-    preferred_letters = None
+    preferred_letters = ''
     if len(sys.argv) > 1:
         letter_string = sys.argv[1]
     if len(sys.argv) > 2:
